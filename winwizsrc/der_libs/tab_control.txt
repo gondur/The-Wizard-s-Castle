@@ -1,0 +1,48 @@
+using the CTabControl class
+===========================
+
+The CTabControl class encapsulates the functions required to implement a 
+WinAPI Tab Control.
+
+//**************************************************************************
+//  create tab control in resource file
+//**************************************************************************
+
+    CONTROL   "", IDC_TAB1, WC_TABCONTROL, 0, x0, y0, dx, dy
+
+//**************************************************************************
+//  instantiate the Tab Control Class (WM_INITDIALOG)
+//**************************************************************************
+static CTabControl *CPortTabControl = NULL ;
+
+	CPortTabControl = new CTabControl(MAX_PORT_COUNT) ;
+
+//**************************************************************************
+//  add tabs to the tab control
+//**************************************************************************
+static void create_next_tab(cport_p this_port)
+{
+   HWND hwndCportTabCtrl = GetDlgItem (hwnd, IDC_TAB1);
+   tab_data_p tabp = CPortTabControl->create_tab(this_port->tab_id, 
+   	IDD_ETH_PORT, "temp", hwndCportTabCtrl, CommPortProc, 
+	(LPVOID) app_specific_data) ;
+
+   strncpy(tabp->label, "tab label", MAX_LABEL_LEN) ;
+   CPortTabControl->set_tab_label(tabp);
+   CPortTabControl->set_active_tab(tabp);   
+}
+
+//**************************************************************************
+//  select another tab and make it active
+//**************************************************************************
+void set_active_tab(uint tab_id)
+{
+   tab_data_p tabp = CPortTabControl->find_tab_data(tab_id) ;
+   CPortTabControl->set_active_tab(tabp);   
+}
+
+//**************************************************************************
+//  close a tab
+//**************************************************************************
+   CPortTabControl->close_tab(target_idx) ;
+

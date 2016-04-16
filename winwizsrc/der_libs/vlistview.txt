@@ -1,0 +1,134 @@
+using the CVListView class
+==========================
+
+NOTE:  The CVListView class can be instantiated either directly,
+       via the base class, or indirectly by a class which inherits it.
+       This file will describe how to instantiate and use the base class.
+
+       See cterminal.txt for examples of how to use a derived class.
+
+//**************************************************************************
+//  data for this class
+//**************************************************************************
+static CVListView *VListView = NULL;
+
+static lv_cols_t lv_cols[] = {
+{ _T("Label1"),      85 },
+{ _T("Label2"),      40 },
+{ _T("Last Label"),   0 },
+{ 0, 0 }} ;
+
+//**************************************************************************
+//  instantiate the class
+//**************************************************************************
+void create_summary_listview(HWND hwndTopLevel, 
+	uint x0, uint y0, uint dx, uint dy)
+{
+   VListView = new CVListView(hwndTopLevel, IDC_LISTVIEW1, g_hinst, 
+   			x0, y0, dx, dy, 
+                        LVL_STY_EDIT_LABELS | LVL_STY_EX_GRIDLINES);
+   VListView->set_listview_font("Times New Roman", 100, 0, 0, 0, true) ;
+   VListView->lview_assign_column_headers(&lv_cols[0], 
+                        (LPARAM) get_image_list()) ;
+}
+
+//****************************************************************************
+//  This function handles the WM_NOTIFY:NM_DBLCLK message
+//****************************************************************************
+static void vlview_double_click(LPARAM lParam)
+{
+   int index = -1 ;
+   char msgstr[LF_FULLFACESIZE + 20] ;
+   NMHDR *hdr = (NMHDR *) lParam;
+   if (VListView->is_lview_hwnd(hdr->hwndFrom)) {
+      index = VListView->get_next_listview_index(index) ;
+      if (index != -1) {
+         // syslog("clicked on element %d\n", index) ;
+         font_list_p fptr = find_font_element((uint) index) ;
+         if (fptr == NULL) {
+            wsprintf(msgstr, "L%u: not found", (uint) index) ;
+         } else {
+            wsprintf(msgstr, "L%u: %s", (uint) index, fptr->name) ;
+         }
+         status_message(msgstr) ; //  display the string somewhere
+      }
+   }
+}
+
+//****************************************************************************
+//  This function handles the WM_NOTIFY:LVN_GETDISPINFO message
+//****************************************************************************
+static void vlview_get_terminal_entry(LPARAM lParam)
+{
+   TCHAR msgstr[LF_FULLFACESIZE+1];
+
+   LV_DISPINFO *lpdi = (LV_DISPINFO *) lParam;
+   //  look up structure element from row number
+   font_list_p fptr = find_font_element((uint) lpdi->item.iItem) ;
+   if (fptr == NULL) {
+      syslog("cannot find item %u, sub-item %u\n", 
+      	 lpdi->item.iItem, lpdi->item.iSubItem) ;
+      return ;
+   }
+   if (lpdi->item.mask & LVIF_TEXT) {
+      switch (lpdi->item.iSubItem) {
+      case 0:
+         wsprintf(msgstr, "column0");
+         break;
+
+      case 1:
+         wsprintf(msgstr, "column1");
+         break;
+
+      case 2:
+         wsprintf(msgstr, "column2");
+         break;
+
+      case 3:
+         wsprintf(msgstr, "column3");
+         break;
+
+      default:
+         wsprintf(msgstr, "??? item %d", lpdi->item.iSubItem) ;  //lint !e585
+         break;
+      }
+      lstrcpy (lpdi->item.pszText, msgstr);
+   }
+}
+
+//**************************************************************************
+//  In WM_NOTIFY handler (for Virtual Listview)
+//**************************************************************************
+
+   case LVN_GETDISPINFO:
+      vlview_get_terminal_entry(lParam) ;
+      return true;
+
+   case NM_CLICK:
+      vlview_double_click(lParam) ;
+      break;
+
+   //  this is used to set custom background color.
+   //  ProcessCustomDraw() does not interact with VListView class
+   case NM_CUSTOMDRAW:
+      if (LOWORD (wParam) == IDC_LISTVIEW1) {
+         LPNMLISTVIEW pnm = (LPNMLISTVIEW) lParam;
+         if (VListView->is_lview_hwnd(pnm->hdr.hwndFrom)) {
+            // syslog("drawing item %u\n", pnm->iItem) ;
+            SetWindowLongA(hwnd, DWL_MSGRESULT, 
+	    	(LONG) ProcessCustomDraw (lParam));
+         }
+      }
+      break;
+
+//**************************************************************************
+//  update data in a column/row (non-virtual listview)
+//**************************************************************************
+   LVITEM LvItem; //  ListView Item struct
+   LvItem.mask     = LVIF_TEXT;      // Text Style
+   LvItem.iItem    = curr_row ;      // choose row  (0-based counter)
+   LvItem.iSubItem = curr_column ;   // choose column (0-based counter)
+   LvItem.pszText  = "sample text" ; // text to display
+   SummaryLView->update_column(&LvItem) ;
+
+

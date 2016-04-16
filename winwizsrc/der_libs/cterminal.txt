@@ -1,0 +1,46 @@
+using the CTerminal class
+=========================
+
+The CTerminal class is derived from VListView class, and adds console-related
+concepts such as console rows/columns and current cursor position.
+
+   //  in higher-level data struct:
+   CTerminal *cpTerm ;
+
+//**************************************************************************
+//  instantiate the class
+//**************************************************************************
+
+   this_port->cpTerm = new CTerminal(hwnd, IDC_TERMINAL, g_hinst, 
+      NULL, //  because LVL_STY_NO_HEADER is specified,
+            //  the array of header strings is NULL.
+      0, ctrl_top, this_port->cxClient, this_port->cyClient - ctrl_top,
+      LVL_STY_VIRTUAL | LVL_STY_NO_HEADER | LVL_STY_PAGE_TO_END
+      ) ;
+
+//**************************************************************************
+//  In WM_NOTIFY handler (for Virtual Listview)
+//**************************************************************************
+
+   case LVN_GETDISPINFO:
+      // get_terminal_entry(this_port->cpterm, lParam) ;
+      this_port->cpTerm->get_terminal_entry(lParam) ;
+      return true;
+
+//********************************************************************
+//  output text to terminal
+//********************************************************************
+int termout(cport_p this_port, const char *fmt, ...)
+{
+   char consoleBuffer[MAX_PKT_CHARS + 1];
+   va_list al; //lint !e522
+
+   va_start(al, fmt);   //lint !e1055 !e530
+   vsprintf(consoleBuffer, fmt, al);   //lint !e64
+
+   this_port->cpTerm->set_term_attr(fgnd_attr, bgnd_attr) ;
+   this_port->cpTerm->termputs(consoleBuffer);
+   va_end(al);
+   return 1;
+}
+

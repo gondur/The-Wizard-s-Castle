@@ -1,0 +1,21 @@
+Using the CThread class
+=======================
+
+Instantiation:
+
+//****************************************************************************
+static DWORD WINAPI IpClientThread(LPVOID iValue)
+{
+   private_data_struct *pds = (private_data_struct *) iValue;
+
+   ...
+   //  do stuff with your thread.
+   //  exit when done.
+
+}
+
+//****************************************************************************
+   //  instantiate the thread
+   CThread *myThread = new CThread(
+   	IpClientThread, (LPVOID) private_data, close_ipcli_thread) ;
+

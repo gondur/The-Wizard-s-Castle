@@ -1,0 +1,20 @@
+// +--------------------------[ RULES FOR WIZARD'S CASTLE ]-----------------------+
+// ¦                                                                              ¦
+// ¦         TO WIN THE GAME       - LEAVE CASTLE WITH THE **ORB OF ZOT**.        ¦
+// ¦                                                                              ¦
+// ¦         TO GET **ORB OF ZOT** - FIND RUNESTAFF (HIDDEN IN CASTLE),           ¦
+// ¦                               - THEN TELEPORT TO LOCATION OF ORB.            ¦
+// ¦                                                                              ¦
+// ¦         WHERE TO TELEPORT?    - GAZE INTO CRYSTAL ORBS FOR HINTS.            ¦
+// ¦                               - (BUT WATCH THOSE STRENGTH POINTS!!)          ¦
+// ¦                               - P.S.....THE ORB MAY LIE.                     ¦
+// ¦                                                                              ¦
+// ¦         HOW TO GET OUT?       - A DRINK MAY HELP YOU THINK....               ¦
+// ¦------------------------------------------------------------------------------¦
+// ¦                          THERE ARE THREE CURSES                              ¦
+// ¦                                                                              ¦
+// ¦         -CURSE OF THE LEECH       TAKES A FEW GP'S EACH TURN;                ¦
+// ¦         -CURSE OF LETHARGY        SLOWS DOWN YOUR REACTIONS IN FIGHTS;       ¦
+// ¦         -CURSE OF FORGETFULLNESS  SLOWLY RETURNS MAPS TO '?'                 ¦
+// ¦                                                                              ¦
+// ¦------------------------------------------------------------------------------¦

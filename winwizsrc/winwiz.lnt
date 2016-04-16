@@ -1,0 +1,13 @@
+lintdefs.cpp
+castinit.cpp
+combat.cpp
+ezfont.cpp
+gfuncs.cpp
+globals.cpp
+initscrn.cpp
+regif.cpp
+statbar.cpp
+vendor.cpp
+wcommon.cpp
+wfuncs.cpp
+winiface.cpp

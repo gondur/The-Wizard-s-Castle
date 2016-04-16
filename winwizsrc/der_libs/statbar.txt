@@ -1,0 +1,34 @@
+using the CStatusBar class
+==========================
+
+//  data for this class
+CStatusBar *MainStatusBar = NULL;
+
+//**************************************************************************
+//  instantiate the class
+//**************************************************************************
+
+   //***************************************************************
+   //  create/configure status bar
+   //***************************************************************
+   MainStatusBar = new CStatusBar(hwnd) ;
+   MainStatusBar->MoveToBottom(cxClient, cyClient) ;
+
+   //  configure status-bar parts
+   int sbparts[3];
+   sbparts[0] = (int) (6 * cxClient / 10) ;
+   sbparts[1] = (int) (8 * cxClient / 10) ;
+   sbparts[2] = -1;
+   MainStatusBar->SetParts(3, &sbparts[0]);
+
+
+//**************************************************************************
+//  output to status bar
+//**************************************************************************
+
+   //  write to main segment (segment 0)
+   MainStatusBar->show_message("Ready") ;
+
+   //  write to other segment
+   MainStatusBar->show_message(1, "section 1");
+

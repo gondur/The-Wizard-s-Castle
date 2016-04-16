@@ -1,0 +1,64 @@
+using the CEthPacketList class
+==============================
+
+The CEthPacketList class encapsulates a packet-handling queue and
+functions to move packets of data onto and off of the queue.
+It also incorporates an event-driven mechanism for waiting for a packet
+to become available on the queue.
+
+//  in higher-level data struct:
+static CEthPacketList *BootPRxPktList = NULL ;
+
+//**************************************************************************
+//  instantiate the class
+//**************************************************************************
+
+   BootPRxPktList = new CEthPacketList(bootp_timeout_secs, EPL_USE_RX_EVENT) ;
+
+//**************************************************************************
+//  to put a packet on the queue.
+//  This will typically be done by an RX thread or other function
+//  which is listening for packets, perhaps on an Ethernet port.
+//**************************************************************************
+
+   BootPRxPktList->put_eth_packet(rx_pkt, pktlen, src_ip_addr);
+
+//********************************************************************
+//  to remove a packet from the queue
+//********************************************************************
+
+   packet_list_p ptemp = get_eth_packet();
+   //  ptemp will be NULL if there are no pending packets
+
+//********************************************************************
+//  how to wait for a packet to be received,
+//  using the Windows Event handler
+//********************************************************************
+
+   BootPRxPktList->reset_event() ;	//  set up the event handler
+
+   bootp_idx = 0 ;   //  reset the found-address list
+   wait_seconds = 0 ;
+   while (LOOP_FOREVER) {
+      //  if we reach timeout without finding the expected
+      //  number of devices, give info to user.
+      if (wait_seconds > scan_secs) {
+         result = 0 ;
+         break;
+      }
+      result = BootPRxPktList->wait_for_eth_packet(bootp_bfr, 1);
+      if (result == -ERROR_SEM_TIMEOUT) {
+         wait_seconds++ ;
+         // termout(this_port, "wait_seconds=%u", wait_seconds) ;
+         continue;
+      }
+      if (result < 0) {
+         errout("wait_for_bootp_response <3>: [%d] %s", result, show_error(result)) ;
+         break;
+      }
+
+      //  at this point, there are [result] bytes of data 
+      //  waiting in [bootp_bfr].
+
+   }  //  loop forever
+

@@ -1,0 +1,15 @@
+ToDo list
+=========
+
+- Impatient vendors is not yet implemented
+
+- Implement some way to track possessions of monsters/vendors,
+  so if we trade/bribe gems to them, we can get them back later.
+
+- Attribute-scramble function is still not optimum; 
+  It still favours STR over DEX over INT.
+
+- telePort needs to call react_to_room()
+  Landing on a gargoyle should not be a painless experience !!
+  04/17/14 - This has been implemented, but not yet tested.
+

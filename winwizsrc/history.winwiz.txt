@@ -1,0 +1,75 @@
+//****************************************************************************
+//  WIZARD'S CASTLE GAME FROM JULY/AUGUST 1980                       
+//  ISSUE OF RECREATIONAL COMPUTING MAGAZINE.                        
+//  WRITTEN FOR EXIDY SORCERER BY JOSEPH R. POWER                    
+//                                                                   
+//  REWRITTEN FOR IBM PC USING GWBASIC                               
+//  BY DANIEL D. (derelict) MILLER                                   
+//  CALIFORNIA POLYTECHNIC STATE UNIVERSITY                          
+//  SAN LUIS OBISPO, CA.  FALL QUARTER, 1985.                        
+//                                                                   
+//  Summer, 1986:                                                    
+//  Converted to Turbo Pascal by the same derelict                   
+//  Last Pascal revision: October 7, 1986                            
+//                                                                   
+//****************************************************************************
+
+vers    date        actions taken
+====  ========   ==========================================
+1.01  12/15/04   original release Win32/C release
+1.02  12/23/04   Fixed numerous bugs
+1.03  12/23/04   - Add support for INI files for colors
+                 - Fix bug in curing Curse of Amnesia
+1.04  12/25/04   Fixed bug in Curse of the Leech
+1.05  12/26/04   Fixed bug in Curse of the Leech bug fix (duh...)
+1.06  01/02/05   Fixed bug in Vendor/Dex incrementing
+1.07  01/02/05   - attribute damage now starts at 1, not 0
+                 - fix bugs in handling telePort
+1.08  01/03/05   - Don't pop keymap when game is won
+                 - Modify monster-description messages
+1.09  09/05/05   Use intelligent method to find help file
+1.10  09/18/05   Add some color at death, to hint at where the
+                 runestaff and orb were.
+1.11  09/19/05   Add INT option to book opening
+1.12  09/20/05   - Linted code with new lint definition file
+                 - Made Gaze more useful in early game
+1.13  09/20/05   Fix bug: one could buy equipment they couldn't afford!
+1.14  09/21/05   vendor: Clean up handling of armour/weapon selection.
+                 (hmmm... closer, but not done yet...)
+1.15  04/11/06   Fix help-file comments
+1.16  12/05/06   Add module to support reading jpeg files.
+                 So far, though, this doesn't work with the tiles file,
+                 because I need to preserve the structs.
+1.17  12/07/06   jpeg read/draw functionality is now in a class, and 
+                 supports tile-painting as needed for the sprites.
+1.19  06/19/07   Re-design status windows so they use actual windows
+                 and static controls, rather than raw dprints writes.
+1.20  06/20/07   - Fixing some bugs in handling of new status windows.
+                 - Modify odds of various "Open Chest" options,
+                   to make good alternatives more likely.
+                 - Fix a bug when stumbling from room
+1.22  08/08/08   - Switch back to .BMP files, which look much better.
+                 - Lint the code with PcLint V8.00x
+1.30  01/05/11 	 Converting to Dialog vs Window interface, using
+                 terminal module.
+1.31  01/05/11   - Add GroupBox around new Treasures block
+                 - Remove Treasures field from Player Info GroupBox
+1.32  08/14/12   Incorporate current common libs and classes
+1.33  04/11/14   - Convert from tiles32.bmp to tiles32.png
+                 - merge PNG interface into a separate class
+1.34  04/13/14   - at startup, place program in center of screen
+                 - fix death message so that it identifies creature carrying Runestaff
+                 - implement obscured location (i.e., don't show position and level)
+                   after hitting Sinkhole or Warp, until a known level is reached.
+1.35 - 04/14/14  - Add new function to LodePng class, which handles image lists 
+		   by accepting an image index in rendering function, and 
+		   calculating offsets into image list from that index.
+	         - add static frames around the treasure icons
+1.36 - 04/16/14  Revising handling of main-screen controls
+1.37 - 04/18/14  - fix bug in handling position awareness 
+		 - added tooltips to treasure fields
+		 - speed up main-loop (cursor) timer, so restore and other
+		   redraws occur more promptly.
+1.38 - 04/22/14  Modify LodePng class to allow simpler calls to 
+                 sprite-rendering function.
+

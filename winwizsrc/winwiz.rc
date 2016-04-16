@@ -1,0 +1,336 @@
+#include <windows.h>
+#include "resource.h"
+
+WINWIZICO       ICON    "pendant.ico"
+
+#define DONE_WIDTH   40   
+#define DONE_HEIGHT  20
+#define DONE_TOP     CL_TOP+5
+#define DONE_LEFT    140
+
+#define ATTR_WIDTH      (20)
+
+//***************************************************************
+//  Note:  all dialog-box dimensions which are specified
+//  in resource files are off by a factor of two.
+//  Yes, this is intentional on Microsoft's part;
+//  the purpose is to confound programmers who are developing
+//  Windows apps for the first time.
+//  Once the application is running, dimensions work normally!!
+//  See GetDialogBaseUnits() and "DIALOG CONTROL" in MSDN
+//***************************************************************
+#define FONT_HEIGHT     10
+#define STR_WIDTH       60
+
+//*******************************************************************
+//  keyboard accelerators
+//*******************************************************************
+IDR_ACCELERATOR1 ACCELERATORS 
+BEGIN
+    // VK_F1,          IDC_BTN_F1,              VIRTKEY, NOINVERT
+    // VK_LEFT,        IDC_VK_LEFT,             VIRTKEY, NOINVERT
+    // VK_UP,          IDC_VK_UP,               VIRTKEY, NOINVERT
+    // VK_RIGHT,       IDC_VK_RIGHT,            VIRTKEY, NOINVERT
+    // VK_DOWN,        IDC_VK_DOWN,             VIRTKEY, NOINVERT
+    "h",	    IDB_HELP,		     ASCII, ALT, NOINVERT
+    "q",	    IDB_CLOSE,	     	     ASCII, ALT, NOINVERT
+END
+
+//*******************************************************************
+//  ElCal calibration dialog
+//*******************************************************************
+#define  PI_X	215
+#define  PI_Y	  4
+#define  PI_FX	(PI_X + 5)
+
+#define	 TREASURE_EDGE     WS_EX_CLIENTEDGE
+// #define	 TREASURE_EDGE     WS_EX_STATICEDGE
+
+// IDD_MAIN_DIALOG DIALOG DISCARDABLE  160, 40, 350, 370
+IDD_MAIN_DIALOG DIALOGEX  160, 40, 350, 370
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX
+// EXSTYLE WS_EX_CONTROLPARENT
+CAPTION "Terminal utility"
+FONT 10, "Times New Roman"
+BEGIN
+   GROUPBOX        " Player Info ",  IDC_PIGROUP,  PI_X,     PI_Y,    130, 108 
+   LTEXT           "Strength",       IDS_STR,      PI_FX,    PI_Y+10,  49,  10 
+   LTEXT           " ",              IDC_STR,      PI_FX+50, PI_Y+10,  50,  10, SS_SUNKEN
+   LTEXT           "Dexterity",      IDS_DEX,      PI_FX,    PI_Y+22,  49,  10 
+   LTEXT           " ",              IDC_DEX,      PI_FX+50, PI_Y+22,  50,  10, SS_SUNKEN
+   LTEXT           "Intelligence",   IDS_INT   ,   PI_FX,    PI_Y+34,  49,  10 
+   LTEXT           " ",              IDC_INT   ,   PI_FX+50, PI_Y+34,  50,  10, SS_SUNKEN
+   LTEXT           "Hit Points",     IDS_HP    ,   PI_FX,    PI_Y+46,  49,  10 
+   LTEXT           " ",              IDC_HP    ,   PI_FX+50, PI_Y+46,  50,  10, SS_SUNKEN
+   LTEXT           "Weapon",         IDS_WEAPON,   PI_FX,    PI_Y+58,  49,  10 
+   LTEXT           " ",              IDC_WEAPON,   PI_FX+50, PI_Y+58,  50,  10, SS_SUNKEN
+   LTEXT           "Armor (points)", IDS_ARMOUR,   PI_FX,    PI_Y+70,  49,  10 
+   LTEXT           " ",              IDC_ARMOUR,   PI_FX+50, PI_Y+70,  50,  10, SS_SUNKEN
+   LTEXT           "Flares",         IDS_FLARES,   PI_FX,    PI_Y+82,  49,  10 
+   LTEXT           " ",              IDC_FLARES,   PI_FX+50, PI_Y+82,  50,  10, SS_SUNKEN
+   LTEXT           "Gold Pieces",    IDS_GP    ,   PI_FX,    PI_Y+94,  49,  10 
+   LTEXT           " ",              IDC_GP    ,   PI_FX+50, PI_Y+94,  50,  10, SS_SUNKEN
+   CTEXT           "Press [H] for Help", IDS_HELP,PI_X,     PI_Y+111, 130,  10, SS_SUNKEN | SS_NOTIFY
+
+   GROUPBOX        " Treasures ",    IDC_TRGROUP, PI_X,     PI_Y+130, 130,  55
+   //  consider putting frame around the treasures, as I did in led.scroll
+   //  Adding SS_OWNERDRAW to these LTEXT fields, did *not* generate WM_DRAWITEM messages
+   LTEXT           "",               IDC_T0, PI_FX,     PI_Y+130+10, 18, 18, SS_NOTIFY, TREASURE_EDGE
+   LTEXT           "",               IDC_T1, PI_FX+25,  PI_Y+130+10, 18, 18, SS_NOTIFY, TREASURE_EDGE
+   LTEXT           "",               IDC_T2, PI_FX+50,  PI_Y+130+10, 18, 18, SS_NOTIFY, TREASURE_EDGE
+   LTEXT           "",               IDC_T3, PI_FX+75,  PI_Y+130+10, 18, 18, SS_NOTIFY, TREASURE_EDGE
+   LTEXT           "",               IDC_RS, PI_FX+100, PI_Y+130+10, 18, 18, SS_NOTIFY, TREASURE_EDGE
+
+   LTEXT           "",               IDC_T4, PI_FX,     PI_Y+130+33, 18, 18, SS_NOTIFY, TREASURE_EDGE
+   LTEXT           "",               IDC_T5, PI_FX+25,  PI_Y+130+33, 18, 18, SS_NOTIFY, TREASURE_EDGE
+   LTEXT           "",               IDC_T6, PI_FX+50,  PI_Y+130+33, 18, 18, SS_NOTIFY, TREASURE_EDGE
+   LTEXT           "",               IDC_T7, PI_FX+75,  PI_Y+130+33, 18, 18, SS_NOTIFY, TREASURE_EDGE
+   LTEXT           "",               IDC_OZ, PI_FX+100, PI_Y+130+33, 18, 18, SS_NOTIFY, TREASURE_EDGE
+
+   // LTEXT           " ",              IDC_MAP_AREA, 2, 1, 200, 200, 0, WS_EX_STATICEDGE
+   LTEXT           " ",              IDC_MAP_AREA, 2, 1, 200, 200, 0, WS_EX_CLIENTEDGE
+   // LTEXT           " ",              IDC_MAP_AREA, 3, 3, 200, 200, WS_EX_CLIENTEDGE  //  doesn't draw
+END
+
+//***************************************************************
+//  character-creation dialog constants
+//***************************************************************
+
+#define DIAG_DX        200
+#define DIAG_DY        210
+
+#define CR_LEFT 10
+#define CR_TOP  30
+#define CR1    (CR_TOP + FONT_HEIGHT)
+#define CR2    (CR1 + FONT_HEIGHT + 2)
+#define CR3    (CR2 + FONT_HEIGHT + 2)
+#define CR4    (CR3 + FONT_HEIGHT + 2)
+#define CR_WIDTH        70
+#define CR_HEIGHT       60
+
+#define CA_TOP    (CR_TOP+CR_HEIGHT+10)
+#define CA1       (CA_TOP + FONT_HEIGHT)
+#define CA2       (CA1 + FONT_HEIGHT + 2)
+#define CA3       (CA2 + FONT_HEIGHT + 2)
+#define CA4       (CA3 + FONT_HEIGHT + 2)
+
+#define CW_LEFT   (CR_LEFT+CR_WIDTH+20)
+#define CWT_LEFT  (CW_LEFT+6)
+#define CW1       (CA_TOP + FONT_HEIGHT)
+#define CW2       (CW1 + FONT_HEIGHT + 2)
+#define CW3       (CW2 + FONT_HEIGHT + 2)
+#define CW4       (CW3 + FONT_HEIGHT + 2)
+
+#define CL_TOP    (CA_TOP+CR_HEIGHT+10)
+#define CL_HEIGHT (FONT_HEIGHT+15)
+#define CL1       (CL_TOP + FONT_HEIGHT)
+
+#define CT1       CR_TOP
+#define CT2       CR1
+#define CT3       CR2
+#define CT4       CR3
+#define CT5       CR4
+
+#define ATTR_LEFT   (CW_LEFT+STR_WIDTH+10)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// character-creation Dialog
+//
+// At some point, I probably want to implement these dialog boxes,
+// instead of building windows on the fly.
+/////////////////////////////////////////////////////////////////////////////
+
+#define STR_WIDTH2      (CR_WIDTH - 10)
+
+IDD_CREATEBOX DIALOG DISCARDABLE  32, 32, DIAG_DX, DIAG_DY
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+FONT FONT_HEIGHT, "Verdana"
+BEGIN
+   CTEXT           "Jac Sabto's Training Center",IDC_STATIC,0,10,DIAG_DX-1,FONT_HEIGHT, SS_SUNKEN
+   // LTEXT           "",IDC_PAINT,114,67,72,72
+   GROUPBOX        "Choose Race",IDC_STATIC,CR_LEFT,CR_TOP,CR_WIDTH,CR_HEIGHT
+   RADIOBUTTON     "H&uman", IDC_HUMAN,  16, CR1, STR_WIDTH,FONT_HEIGHT,WS_GROUP | WS_TABSTOP
+   RADIOBUTTON     "&Dwarf", IDC_DWARF,  16, CR2, STR_WIDTH,FONT_HEIGHT
+   RADIOBUTTON     "&Hobbit",IDC_HOBBIT, 16, CR3, STR_WIDTH,FONT_HEIGHT
+   RADIOBUTTON     "&Elf",   IDC_ELF,    16, CR4, STR_WIDTH,FONT_HEIGHT
+
+   GROUPBOX        "Choose Armour",IDC_STATIC,CR_LEFT,CA_TOP,CR_WIDTH,CR_HEIGHT
+   RADIOBUTTON     "&None (0)",     IDC_ANONE,  16, CA1, STR_WIDTH2,FONT_HEIGHT,WS_GROUP | WS_TABSTOP
+   RADIOBUTTON     "&Leather (10)", IDC_ALEATH, 16, CA2, STR_WIDTH2,FONT_HEIGHT
+   RADIOBUTTON     "&Chain (20)",   IDC_ACHAIN, 16, CA3, STR_WIDTH2,FONT_HEIGHT
+   RADIOBUTTON     "&Plate (30)",   IDC_APLATE, 16, CA4, STR_WIDTH2,FONT_HEIGHT
+
+   GROUPBOX        "Choose Weapon",IDC_STATIC,CW_LEFT,CA_TOP,CR_WIDTH,CR_HEIGHT
+   RADIOBUTTON     "N&one (0)",    IDC_WNONE,   CWT_LEFT, CW1, STR_WIDTH2,FONT_HEIGHT,WS_GROUP | WS_TABSTOP
+   RADIOBUTTON     "D&agger (10)", IDC_WDAGGER, CWT_LEFT, CW2, STR_WIDTH2,FONT_HEIGHT
+   RADIOBUTTON     "&Mace (20)",   IDC_WMACE,   CWT_LEFT, CW3, STR_WIDTH2,FONT_HEIGHT
+   RADIOBUTTON     "&Sword (30)",  IDC_WSWORD,  CWT_LEFT, CW4, STR_WIDTH2,FONT_HEIGHT
+
+   GROUPBOX        "Eternal Lamp",IDC_STATIC,CR_LEFT,CL_TOP,CR_WIDTH,CL_HEIGHT
+   CHECKBOX        "&Get Lamp (20)",   IDC_LAMP, 16, CL1, STR_WIDTH,FONT_HEIGHT,WS_GROUP | WS_TABSTOP
+
+   LTEXT           "Gold left:",  IDC_STATIC, CW_LEFT,    CT1, 45, 10
+   LTEXT           " ",           IDC_CCDATA1,CW_LEFT+70, CT1, 15, 10, SS_SUNKEN
+
+   LTEXT           "Free points:",IDC_STATIC, CW_LEFT,    CT2, 45, 10
+   LTEXT           " ",           IDC_CCDATA2,CW_LEFT+70, CT2, 15, 10, SS_SUNKEN
+
+   LTEXT           "Str:",        IDC_STATIC, CW_LEFT,    CT3, 20, 10
+   LTEXT           " ",           IDC_CCDATA3,CW_LEFT+70, CT3, 15, 10, SS_SUNKEN
+   PUSHBUTTON      "+",      	  IDC_STRUP,  CW_LEFT+59, CT3+1, 8, 8
+   PUSHBUTTON      "-",      	  IDC_STRDN,  CW_LEFT+88, CT3+1, 8, 8
+
+   LTEXT           "Dex:",        IDC_STATIC, CW_LEFT,    CT4, 20, 10
+   LTEXT           " ",           IDC_CCDATA4,CW_LEFT+70, CT4, 15, 10, SS_SUNKEN
+   PUSHBUTTON      "+",      	  IDC_DEXUP,  CW_LEFT+59, CT4+1, 8, 8
+   PUSHBUTTON      "-",      	  IDC_DEXDN,  CW_LEFT+88, CT4+1, 8, 8
+
+   LTEXT           "Int:",        IDC_STATIC, CW_LEFT,    CT5, 20, 10
+   LTEXT           " ",           IDC_CCDATA5,CW_LEFT+70, CT5, 15, 10, SS_SUNKEN
+   PUSHBUTTON      "+",      	  IDC_INTUP,  CW_LEFT+59, CT5+1, 8, 8
+   PUSHBUTTON      "-",      	  IDC_INTDN,  CW_LEFT+88, CT5+1, 8, 8
+
+   DEFPUSHBUTTON   "Done",IDOK,DONE_LEFT,DONE_TOP,DONE_WIDTH,DONE_HEIGHT,WS_GROUP
+
+END
+
+//***************************************************************
+//  vendor-interface dialog constants
+//***************************************************************
+
+#define VENDOR_DX   240
+#define VENDOR_DY   260
+
+#define VS_LEFT      10
+#define VS_TOP       25
+#define VS1    (VS_TOP + FONT_HEIGHT)
+#define VS2    (VS1 + FONT_HEIGHT + 2)
+#define VS3    (VS2 + FONT_HEIGHT + 2)
+#define VS4    (VS3 + FONT_HEIGHT + 2)
+#define VS5    (VS4 + FONT_HEIGHT + 2)
+#define VS6    (VS5 + FONT_HEIGHT + 2)
+#define VS7    (VS6 + FONT_HEIGHT + 2)
+#define VS8    (VS7 + FONT_HEIGHT + 2)
+#define VS_WIDTH     100
+#define VS_HEIGHT   (VS8 - VS_TOP + 15)
+
+#define  VGEM_LEFT      (16 + STR_WIDTH)
+#define  VGEM_VWIDTH    25
+
+#define  VWEAP_LEFT     (VS_LEFT + VS_WIDTH + 10)
+#define  CVWEAP_LEFT    (VWEAP_LEFT + 6)
+#define  VWEAP_WIDTH    100
+
+#define VW1       (VS_TOP + FONT_HEIGHT)
+#define VW2       (VW1 + FONT_HEIGHT + 2)
+#define VW3       (VW2 + FONT_HEIGHT + 2)
+#define VW4       (VW3 + FONT_HEIGHT + 2)
+
+#define VARMOR_TOP  (VS_TOP + CR_HEIGHT + 19)
+#define VA1       (VARMOR_TOP + FONT_HEIGHT)
+#define VA2       (VA1 + FONT_HEIGHT + 2)
+#define VA3       (VA2 + FONT_HEIGHT + 2)
+#define VA4       (VA3 + FONT_HEIGHT + 2)
+
+#define VGP_LEFT  (VS_LEFT + 6)
+
+#define GO_TOP    (VS_TOP + VS_HEIGHT + 5)
+#define VGP_TOP   (GO_TOP + FONT_HEIGHT)
+
+#define VDONE_WIDTH  60
+#define VDONE_LEFT   (VWEAP_LEFT + ((VWEAP_WIDTH/2) - (VDONE_WIDTH/2)))
+#define SG_WIDTH     50   
+#define SG_TOP       (DONE_TOP + DONE_HEIGHT + 10)
+#define SG_LEFT      (VWEAP_LEFT + ((VWEAP_WIDTH/2) - (SG_WIDTH/2)))
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//  Vendor Dialog
+//
+// At some point, I probably want to implement these dialog boxes,
+// instead of building windows on the fly.
+/////////////////////////////////////////////////////////////////////////////
+
+#define  VSTR_TOP       DONE_TOP+20
+#define  VDEX_TOP       DONE_TOP+30
+#define  VINT_TOP       DONE_TOP+40
+
+#define  VAT_HEIGHT     (75)
+
+#define  VL1    (VS_LEFT + ATTR_WIDTH + 16)
+#define  VL2    (VL1 + VGEM_VWIDTH + 20)
+
+#define  VATB_LEFT      (VL1 + 27)
+
+#define  BTN_DIM        8
+
+IDD_VENDORBOX DIALOG DISCARDABLE  32, 32, VENDOR_DX, VENDOR_DY
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+FONT FONT_HEIGHT, "Verdana"
+BEGIN
+    CTEXT       "Seventh-Eel Heaven store",IDC_STATIC,0,10,VENDOR_DX-1,FONT_HEIGHT
+
+    GROUPBOX    "Gem Sales",IDC_STATIC,VS_LEFT,VS_TOP,VS_WIDTH,VS_HEIGHT
+    CHECKBOX    " Ruby Red"  , IDC_GEM1, 16, VS1, STR_WIDTH, FONT_HEIGHT,WS_GROUP | WS_TABSTOP
+    CHECKBOX    " Norn Stone", IDC_GEM2, 16, VS2, STR_WIDTH, FONT_HEIGHT
+    CHECKBOX    " Pale Pearl", IDC_GEM3, 16, VS3, STR_WIDTH, FONT_HEIGHT
+    CHECKBOX    " Opal Eye"  , IDC_GEM4, 16, VS4, STR_WIDTH, FONT_HEIGHT
+    CHECKBOX    " Green Gem" , IDC_GEM5, 16, VS5, STR_WIDTH, FONT_HEIGHT
+    CHECKBOX    " Blue Flame", IDC_GEM6, 16, VS6, STR_WIDTH, FONT_HEIGHT
+    CHECKBOX    " Palantir"  , IDC_GEM7, 16, VS7, STR_WIDTH, FONT_HEIGHT
+    CHECKBOX    " Silmaril"  , IDC_GEM8, 16, VS8, STR_WIDTH, FONT_HEIGHT
+
+    RTEXT       " ", IDC_TGEM1, VGEM_LEFT, VS1, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+    RTEXT       " ", IDC_TGEM2, VGEM_LEFT, VS2, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+    RTEXT       " ", IDC_TGEM3, VGEM_LEFT, VS3, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+    RTEXT       " ", IDC_TGEM4, VGEM_LEFT, VS4, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+    RTEXT       " ", IDC_TGEM5, VGEM_LEFT, VS5, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+    RTEXT       " ", IDC_TGEM6, VGEM_LEFT, VS6, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+    RTEXT       " ", IDC_TGEM7, VGEM_LEFT, VS7, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+    RTEXT       " ", IDC_TGEM8, VGEM_LEFT, VS8, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+
+    GROUPBOX       "Choose Weapon", IDC_STATIC,VWEAP_LEFT,VS_TOP,VWEAP_WIDTH,CR_HEIGHT
+    RADIOBUTTON    " None (0)",    IDC_VWNONE,   CVWEAP_LEFT, VW1, STR_WIDTH,FONT_HEIGHT,WS_GROUP | WS_TABSTOP
+    RADIOBUTTON    " Dagger (1250)",  IDC_VWDAGGER, CVWEAP_LEFT, VW2, STR_WIDTH,FONT_HEIGHT
+    RADIOBUTTON    " Mace (1500)",    IDC_VWMACE,   CVWEAP_LEFT, VW3, STR_WIDTH,FONT_HEIGHT
+    RADIOBUTTON    " Sword (2000)",   IDC_VWSWORD,  CVWEAP_LEFT, VW4, STR_WIDTH,FONT_HEIGHT
+
+    GROUPBOX       "Choose Armour", IDC_STATIC,VWEAP_LEFT,VARMOR_TOP,VWEAP_WIDTH,CR_HEIGHT
+    RADIOBUTTON    " None (0)",    IDC_VANONE,   CVWEAP_LEFT, VA1, STR_WIDTH,FONT_HEIGHT,WS_GROUP | WS_TABSTOP
+    RADIOBUTTON    " Leather (1250)", IDC_VALEATH,  CVWEAP_LEFT, VA2, STR_WIDTH,FONT_HEIGHT
+    RADIOBUTTON    " Chain (1500)",   IDC_VACHAIN,  CVWEAP_LEFT, VA3, STR_WIDTH,FONT_HEIGHT
+    RADIOBUTTON    " Plate (2000)",   IDC_VAPLATE,  CVWEAP_LEFT, VA4, STR_WIDTH,FONT_HEIGHT
+
+    GROUPBOX       "Current Gold",IDC_STATIC,VS_LEFT,GO_TOP,VS_WIDTH,CL_HEIGHT
+    LTEXT          " ", IDC_VGOLD, VGP_LEFT, VGP_TOP, VGEM_VWIDTH, FONT_HEIGHT
+
+    GROUPBOX       "Attributes", IDC_STATIC,VS_LEFT,DONE_TOP-5,VS_WIDTH+21,VAT_HEIGHT
+    LTEXT          "Cost *",  IDC_STATIC, VL1, DONE_TOP+12, VGEM_VWIDTH, FONT_HEIGHT
+    LTEXT          "Current", IDC_STATIC, VL2, DONE_TOP+5,  VGEM_VWIDTH, FONT_HEIGHT
+    LTEXT          "Level",   IDC_STATIC, VL2, DONE_TOP+12, VGEM_VWIDTH, FONT_HEIGHT
+
+    LTEXT          "Str",    IDC_STATIC,  VS_LEFT+6,  VSTR_TOP, ATTR_WIDTH, FONT_HEIGHT
+    RTEXT          " ",      IDC_VSTRCOST,  VL1, VSTR_TOP, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+    PUSHBUTTON     "+",      IDC_VSTRMORE, VL1+VGEM_VWIDTH+10,               VSTR_TOP+1, BTN_DIM, BTN_DIM
+    RTEXT          " ", IDC_VSTRDATA,  VL1+VGEM_VWIDTH+21,               VSTR_TOP, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+    PUSHBUTTON     "-",      IDC_VSTRLESS, VL1+VGEM_VWIDTH+21+VGEM_VWIDTH+2, VSTR_TOP+1, BTN_DIM, BTN_DIM
+
+    LTEXT          "Dex", IDC_STATIC, VS_LEFT+6, VDEX_TOP, ATTR_WIDTH, FONT_HEIGHT
+    RTEXT          " ",      IDC_VDEXCOST,  VL1, VDEX_TOP, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+    PUSHBUTTON     "+",      IDC_VDEXMORE, VL1+VGEM_VWIDTH+10,               VDEX_TOP+1, BTN_DIM, BTN_DIM
+    RTEXT          " ", IDC_VDEXDATA,  VL1+VGEM_VWIDTH+21,               VDEX_TOP, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+    PUSHBUTTON     "-",      IDC_VDEXLESS, VL1+VGEM_VWIDTH+21+VGEM_VWIDTH+2, VDEX_TOP+1, BTN_DIM, BTN_DIM
+
+    LTEXT          "Int", IDC_STATIC, VS_LEFT+6, VINT_TOP, ATTR_WIDTH, FONT_HEIGHT
+    RTEXT          " ",      IDC_VINTCOST, VL1, VINT_TOP, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+    PUSHBUTTON     "+",      IDC_VINTMORE, VL1+VGEM_VWIDTH+10,               VINT_TOP+1, BTN_DIM, BTN_DIM
+    RTEXT          " ", IDC_VINTDATA, VL1+VGEM_VWIDTH+21,               VINT_TOP, VGEM_VWIDTH, FONT_HEIGHT,0,WS_EX_STATICEDGE
+    PUSHBUTTON     "-",      IDC_VINTLESS, VL1+VGEM_VWIDTH+21+VGEM_VWIDTH+2, VINT_TOP+1, BTN_DIM, BTN_DIM
+
+    LTEXT          "* Number of skill points/1000 GP", IDC_STATIC, VS_LEFT+6, VINT_TOP+FONT_HEIGHT+5, 112, FONT_HEIGHT
+    PUSHBUTTON     "Sell Gems",IDC_SELLGEMS,SG_LEFT,SG_TOP,SG_WIDTH,DONE_HEIGHT,WS_GROUP
+    DEFPUSHBUTTON  "Pay and Exit",IDVOK,VDONE_LEFT,DONE_TOP,VDONE_WIDTH,DONE_HEIGHT,WS_GROUP
+
+END
+
